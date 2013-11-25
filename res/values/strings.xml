@@ -6,5 +6,9 @@
     <string name="encrypt_msg">Encrypt a Message</string>
     <string name="decrypt_msg">Decrypt an Image</string>
     <string name="title_msg">Stegasaurus</string>
+    <string name="title_activity_message">MessageActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="edit_hint">Type message here</string>
+    <string name="msg_conf_msg">Done; Take Picture</string>
 
 </resources>

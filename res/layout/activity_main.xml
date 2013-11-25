@@ -19,21 +19,22 @@
         android:textSize="48sp" />
     
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
     
 	    <Button
 	        android:id="@+id/enc_btn"
-	        android:layout_width="wrap_content"
+	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
             android:layout_weight="1"
 	        android:layout_gravity="center"
-	        android:text="@string/encrypt_msg" />
+	        android:text="@string/encrypt_msg"
+	        android:onClick="makeMessage" />
 	    
 	    <Button
 	        android:id="@+id/dec_btn"
-	        android:layout_width="wrap_content"
+	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
             android:layout_weight="1"   
 	        android:layout_gravity="center"
