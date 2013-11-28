@@ -7,6 +7,8 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
+    
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:allowBackup="true"
@@ -29,6 +31,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.stegosaurus.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.stegasaurus.TakePhotoActivity"
+            android:label="@string/title_activity_take_photo"
+            android:parentActivityName="com.example.stegasaurus.MessageActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.stegasaurus.MessageActivity" />
         </activity>
     </application>
 

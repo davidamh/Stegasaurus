@@ -1,22 +1,19 @@
 package com.example.stegasaurus;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
+import android.support.v4.app.NavUtils;
+import android.annotation.TargetApi;
+import android.os.Build;
 
-public class MessageActivity extends Activity {
+public class TakePhotoActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_message);
+		setContentView(R.layout.activity_take_photo);
 		// Show the Up button in the action bar.
 		setupActionBar();
 	}
@@ -34,7 +31,7 @@ public class MessageActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.message, menu);
+		getMenuInflater().inflate(R.menu.take_photo, menu);
 		return true;
 	}
 
@@ -55,11 +52,4 @@ public class MessageActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void openCamera(View view) {
-		Intent intent = new Intent(this, TakePhotoActivity.class);
-		EditText ETMsg = (EditText) findViewById(R.id.make_message);
-		String msg = ETMsg.getText().toString();
-		intent.putExtra("com.example.stegasaurus.MESSAGE", msg);
-		startActivity(intent);
-	}
 }
