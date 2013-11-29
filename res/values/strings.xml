@@ -10,6 +10,5 @@
     <string name="hello_world">Hello world!</string>
     <string name="edit_hint">Type message here</string>
     <string name="msg_conf_msg">Done; Take Picture</string>
-    <string name="title_activity_take_photo">TakePhotoActivity</string>
 
 </resources>

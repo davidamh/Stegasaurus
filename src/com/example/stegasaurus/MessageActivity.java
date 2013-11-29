@@ -1,10 +1,16 @@
 package com.example.stegasaurus;
 
+import java.util.List;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +18,9 @@ import android.view.View;
 import android.widget.EditText;
 
 public class MessageActivity extends Activity {
+	
+	final int PHOTO_REQUEST = 1;
+	String message = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +65,61 @@ public class MessageActivity extends Activity {
 	}
 
 	public void openCamera(View view) {
-		Intent intent = new Intent(this, TakePhotoActivity.class);
-		EditText ETMsg = (EditText) findViewById(R.id.make_message);
-		String msg = ETMsg.getText().toString();
-		intent.putExtra("com.example.stegasaurus.MESSAGE", msg);
-		startActivity(intent);
+		Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		
+		PackageManager pm = getPackageManager();
+		List<ResolveInfo> activities = pm.queryIntentActivities(takePhotoIntent, 0);
+		
+		if(activities.size() > 0) {
+			EditText ETMsg = (EditText) findViewById(R.id.make_message);
+			message = ETMsg.getText().toString();
+			
+			startActivityForResult(takePhotoIntent, PHOTO_REQUEST);
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(requestCode == PHOTO_REQUEST && resultCode == RESULT_OK) {
+			Bundle extras = data.getExtras();
+			Bitmap pic = (Bitmap) extras.get("data");
+			
+			Bitmap encPic = encrypt(pic, message);
+			
+			//TODO write the picture
+		}
+	}
+	
+	private Bitmap encrypt(Bitmap pic, String msg) {
+		Bitmap ret = pic.copy(Bitmap.Config.ARGB_8888, true);
+		
+		char[] msgArr = msg.toCharArray();
+		int msgLen = msgArr.length;
+		
+		// Create the array with the message length prepended
+		char[] newArr = new char[msgArr.length + 4];
+		for(int i = 0; i < 4; i++) {
+			newArr[i] = (char) ((msgLen >>> ((3-i) * 8)) & 0x000000FF);
+		}
+		for(int i = 0; i < msgArr.length; i++) {
+			newArr[i+4] = msgArr[i];
+		}
+		msgArr = newArr;
+		
+		int bMapH = ret.getHeight();
+		int bMapW = ret.getWidth();
+		
+		// Add one byte to offset integer division, then divide by two since
+		// there will be two bytes encoded per pixel.
+		if((msgArr.length + 1)/2 > bMapH * bMapW) {
+			// The Bitmap can't contain the string fully
+			return null;
+		}
+		
+		int numRows = (msgArr.length + bMapW - 1) / bMapW;
+		int[] bMapPx = new int[numRows * bMapW];
+		ret.getPixels(bMapPx, 0, bMapW, 0, 0, bMapW, numRows);
+		
+		//TODO overwrite the pixels properly
 	}
 }
