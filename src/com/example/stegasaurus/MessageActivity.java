@@ -92,6 +92,7 @@ public class MessageActivity extends Activity {
 	
 	private Bitmap encrypt(Bitmap pic, String msg) {
 		Bitmap ret = pic.copy(Bitmap.Config.ARGB_8888, true);
+		ret.setHasAlpha(true);
 		
 		char[] msgArr = msg.toCharArray();
 		int msgLen = msgArr.length;
@@ -120,6 +121,26 @@ public class MessageActivity extends Activity {
 		int[] bMapPx = new int[numRows * bMapW];
 		ret.getPixels(bMapPx, 0, bMapW, 0, 0, bMapW, numRows);
 		
-		//TODO overwrite the pixels properly
+		int idx = 0;
+		while(idx < msgArr.length) {
+			int pIdx = idx / 2;
+			
+			char c1 = msgArr[idx++];
+			char c2 = idx < msgArr.length ? msgArr[idx++] : 0;
+			
+			int pixel = bMapPx[pIdx];
+			pixel &= 0xF0F0F0F0;
+			
+			pixel |= (int) ((c1 & 0xF0) << 20);
+			pixel |= (int) ((c1 & 0x0F) << 16);
+			pixel |= (int) ((c2 & 0xF0) << 4);
+			pixel |= (int) (c2 & 0x0F);
+			
+			bMapPx[pIdx] = pixel;
+		}
+		
+		ret.setPixels(bMapPx, 0, bMapW, 0, 0, bMapW, numRows);
+		
+		return ret;
 	}
 }
