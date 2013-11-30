@@ -1,6 +1,10 @@
 package com.example.stegasaurus;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
 import java.util.List;
+import java.text.DateFormat;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -10,6 +14,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -86,7 +91,11 @@ public class MessageActivity extends Activity {
 			
 			Bitmap encPic = encrypt(pic, message);
 			
-			//TODO write the picture
+			if(encPic != null) {
+				writeEncImage(encPic);
+				
+				//TODO Maybe notify user and return to main screen?
+			}
 		}
 	}
 	
@@ -142,5 +151,20 @@ public class MessageActivity extends Activity {
 		ret.setPixels(bMapPx, 0, bMapW, 0, 0, bMapW, numRows);
 		
 		return ret;
+	}
+	
+	private void writeEncImage(Bitmap pic) {
+		File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
+		String fileName = "stegasaurus_" + timeStamp + ".png";
+		File storageDir = new File(dir, fileName);
+		
+		try {
+			FileOutputStream out = new FileOutputStream(storageDir);
+			pic.compress(Bitmap.CompressFormat.PNG, 100, out);
+			out.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
