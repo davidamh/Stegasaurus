@@ -1,4 +1,4 @@
-Stegosaurus
+Stegasaurus
 ===========
 
 Mobile steganography app for CS4264.
