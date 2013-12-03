@@ -20,3 +20,42 @@ encrypted. `"HI" = 0x4849`, so the enrcyption looks like
 ```
 
 So, the resulting "cipher-pixel" has the form `C = #04F834F9`.
+
+
+
+
+"Hello there."
+
+length 12
+
+Encoding the Hex 12 as a 32 bit integer
+
+0x0000000C
+
+then the message in bytes
+
+Imageine Pixel 1 0xFF FF FF FF
+Imagine Pixel 2 0xFF FF FF FF
+
+Once length gets put in
+
+New Pixel 1 0x F0 F0 F0 F0
+New Pixel 2 0x F0 F0 F0 FC
+
+To decrypt:
+
+User selects pic from gallery
+load file into bitmap
+read first two pixels to get length of the message
+store the results in an integer
+Erorr check - make sure the size is within the size of the image
+decrypt each pizel by reversing encrypt alg
+
+
+
+private String decrypt (Bitmap picture)
+{
+
+
+}
+
