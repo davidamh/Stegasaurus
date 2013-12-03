@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void decryptPicture(View view) {
-		
+		Intent intent = new Intent(this, DecryptActivity.class);
+		startActivity(intent);
 	}
 }
