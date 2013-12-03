@@ -2,12 +2,13 @@ package com.example.stegasaurus;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
-import java.text.DateFormat;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MessageActivity extends Activity {
 	
@@ -92,9 +94,23 @@ public class MessageActivity extends Activity {
 			Bitmap encPic = encrypt(pic, message);
 			
 			if(encPic != null) {
-				writeEncImage(encPic);
+				boolean encOK = writeEncImage(encPic);
+
+				Context context = getApplicationContext();
+				int duration = Toast.LENGTH_SHORT;
 				
-				//TODO Maybe notify user and return to main screen?
+				if(encOK) {
+					CharSequence text = "Picture saved successfully.";
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+					
+					finish();
+				}
+				else {
+					CharSequence text = "Error saving picture.";
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				}
 			}
 		}
 	}
@@ -153,7 +169,7 @@ public class MessageActivity extends Activity {
 		return ret;
 	}
 	
-	private void writeEncImage(Bitmap pic) {
+	private boolean writeEncImage(Bitmap pic) {
 		File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 		String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
 		String fileName = "stegasaurus_" + timeStamp + ".png";
@@ -163,8 +179,11 @@ public class MessageActivity extends Activity {
 			FileOutputStream out = new FileOutputStream(storageDir);
 			pic.compress(Bitmap.CompressFormat.PNG, 100, out);
 			out.close();
+			
+			return true;
 		} catch(Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 }
