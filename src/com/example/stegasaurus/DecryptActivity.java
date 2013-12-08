@@ -1,9 +1,12 @@
 package com.example.stegasaurus;
 
 import java.io.InputStream;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -25,9 +28,16 @@ public class DecryptActivity extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		Intent choosePictureIntent = new Intent(Intent.ACTION_PICK);
+		Intent choosePictureIntent = new Intent();
 		choosePictureIntent.setType("image/*");
-		startActivityForResult(choosePictureIntent, REQUEST_CHOOSE_IMAGE);
+		choosePictureIntent.setAction(Intent.ACTION_GET_CONTENT);
+		
+		PackageManager pm = getPackageManager();
+		List<ResolveInfo> activities = pm.queryIntentActivities(choosePictureIntent, 0);
+		
+		if(activities.size() > 0) {
+			startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), REQUEST_CHOOSE_IMAGE);
+		}
 	}
 
 	/**
