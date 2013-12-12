@@ -161,7 +161,7 @@ public class DecryptActivity extends Activity {
 			pIdx++;
 		}
 		
-		String ret = msgArr.toString();
+		String ret = new String(msgArr);
 		return ret;
 	}
 	
@@ -211,9 +211,7 @@ public class DecryptActivity extends Activity {
 		length |= pixelP6;
 		length |= pixelP7;
 		length |= pixelP8;
-		
-		System.out.println (length);
-		
+				
 		return length;
 	}
 }
