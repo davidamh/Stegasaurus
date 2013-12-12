@@ -98,6 +98,122 @@ public class DecryptActivity extends Activity {
 	}
 
 	private String decrypt(Bitmap pic) {
-		return "";
+		Bitmap map = pic.copy(Bitmap.Config.ARGB_8888, true);
+		map.setHasAlpha(true);
+
+		// Get the Height and the Width of the bit map picture
+		int bMapH = map.getHeight();
+		int bMapW = map.getWidth();
+		
+		// Set up the int array and then use it in the call 
+		int[] bMapPx = new int[bMapH * bMapW];
+		map.getPixels(bMapPx, 0, bMapW, 0, 0, bMapW, bMapH);
+				
+		int length = getLength(bMapPx);
+		
+		if (length > bMapPx.length - 2)
+		{
+			return null;
+		}
+		char[] msgArr = new char[length];
+		
+		int loop = 0;
+		int pIdx = 2;
+		while (loop < msgArr.length)
+		{
+			int pixelP1 = bMapPx[pIdx];	
+			int pixelP2 = bMapPx[pIdx];
+			
+			pixelP1 &= 0x0F000000;
+			pixelP2 &= 0x000F0000;
+
+			pixelP1 = (pixelP1 >> 20);
+			pixelP2 = (pixelP2 >> 16);
+			
+			int character1 = 0;
+			character1 |= pixelP1;
+			character1 |= pixelP2;
+			
+			msgArr[loop] = (char)character1;
+			
+			loop++;
+			
+			if (!(loop < msgArr.length))
+			{
+				break;
+			}
+			
+			int pixelP3 = bMapPx[pIdx];			
+			int pixelP4 = bMapPx[pIdx];
+			
+			pixelP3 &= 0x00000F00;
+			pixelP4 &= 0x0000000F;
+			
+			pixelP3 = (pixelP3 >> 4);
+			
+			int character2 = 0;
+			character2 |= pixelP3;
+			character2 |= pixelP4;
+			
+			msgArr[loop] = (char)character2;
+
+			loop++;
+			pIdx++;
+		}
+		
+		String ret = msgArr.toString();
+		return ret;
+	}
+	
+	
+	private int getLength (int[] bMapPx)
+	{
+		// Create a part for each pixel, separate out the relevant part and then merge it into length.		
+		int pixelP1 = bMapPx[0];	
+		int pixelP2 = bMapPx[0];			
+		int pixelP3 = bMapPx[0];			
+		int pixelP4 = bMapPx[0];	
+		
+		int pixelP5 = bMapPx[1];	
+		int pixelP6 = bMapPx[1];			
+		int pixelP7 = bMapPx[1];			
+		int pixelP8 = bMapPx[1];	
+		
+		// separate out the relevant part
+		pixelP1 &= 0x0F000000;
+		pixelP2 &= 0x000F0000;
+		pixelP3 &= 0x00000F00;
+		pixelP4 &= 0x0000000F;
+		
+		pixelP5 &= 0x0F000000;
+		pixelP6 &= 0x000F0000;
+		pixelP7 &= 0x00000F00;
+		pixelP8 &= 0x0000000F;
+		
+		// Move it to the correct spot in the int
+		pixelP1 = (pixelP1 << 4);
+		pixelP2 = (pixelP2 << 8);
+		pixelP3 = (pixelP3 << 12);
+		pixelP4 = (pixelP4 << 16);
+		
+		pixelP5 = (pixelP5 >> 12);
+		pixelP6 = (pixelP6 >> 8);
+		pixelP7 = (pixelP7 >> 4);
+		
+		// Create the length and then merge them all in
+		int length = 0;
+		length |= pixelP1;
+		length |= pixelP2;
+		length |= pixelP3;
+		length |= pixelP4;
+
+		length |= pixelP5;
+		length |= pixelP6;
+		length |= pixelP7;
+		length |= pixelP8;
+		
+		System.out.println (length);
+		
+		return length;
 	}
 }
