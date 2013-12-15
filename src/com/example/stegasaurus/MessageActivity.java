@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -116,6 +117,7 @@ public class MessageActivity extends Activity {
 	}
 	
 	private Bitmap encrypt(Bitmap pic, String msg) {
+		
 		Bitmap ret = pic.copy(Bitmap.Config.ARGB_8888, true);
 		ret.setHasAlpha(true);
 		
@@ -170,15 +172,25 @@ public class MessageActivity extends Activity {
 	}
 	
 	private boolean writeEncImage(Bitmap pic) {
-		File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/Camera");
+		if (!dir.exists()){
+			dir.mkdir();
+		}
+		
 		String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
 		String fileName = "stegasaurus_" + timeStamp + ".png";
 		File storageDir = new File(dir, fileName);
+		
 		
 		try {
 			FileOutputStream out = new FileOutputStream(storageDir);
 			pic.compress(Bitmap.CompressFormat.PNG, 100, out);
 			out.close();
+			
+			sendBroadcast (
+				    new Intent( Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, 
+				                Uri.parse( "file://" + storageDir.getAbsolutePath() ) )
+				);
 			
 			return true;
 		} catch(Exception e) {
