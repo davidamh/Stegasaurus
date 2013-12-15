@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	public void makeMessage(View view) {
 		Intent intent = new Intent(this, MessageActivity.class);
 		startActivity(intent);
