@@ -7,7 +7,7 @@
     <uses-sdk
         android:minSdkVersion="12"
         android:targetSdkVersion="19" />
-    
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
@@ -29,6 +29,14 @@
         <activity
             android:name="com.example.stegasaurus.MessageActivity"
             android:label="@string/title_activity_message"
+            android:parentActivityName="com.example.stegasaurus.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.stegasaurus.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.stegasaurus.DecryptActivity"
+            android:label="@string/title_activity_decrypt"
             android:parentActivityName="com.example.stegasaurus.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

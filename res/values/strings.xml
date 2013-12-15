@@ -9,6 +9,8 @@
     <string name="title_activity_message">MessageActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="edit_hint">Type message here</string>
-    <string name="msg_conf_msg">Done; Take Picture</string>
+    <string name="msg_conf_msg">Take Picture</string>
+    <string name="title_activity_decrypt">DecryptActivity</string>
+    <string name="ret_msg">Return to Main Screen</string>
 
 </resources>
